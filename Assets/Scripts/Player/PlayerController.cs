@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleKeyPress(Dictionary<string, float> activatedKeys)
     {
-        Debug.Log(Input.GetAxisRaw("Sprint"));
         Vector2 MoveVector = new();
         foreach (KeyValuePair<string, float> item in activatedKeys)
         {
