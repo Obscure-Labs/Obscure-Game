@@ -7,18 +7,18 @@ public class PlayerController : MonoBehaviour
     private List<string> registeredKeyboardInputs = new List<string>()
     {
         "Horizontal",
-        "Vertical",
-        "Jump",
-        "Sprint"
+        "Vertical"
     };
 
     public Dictionary<string, float> activatedKeys = new Dictionary<string, float>();
-    public float walkSpeed = 1;
+    public Dictionary<string, float> deactivatedKeys = new Dictionary<string, float>();
+    
+    public float walkSpeed = 10;
+    public float sprintSpeed = 15;
     
     public Rigidbody2D PlayerRB;
     void Start()
     {
-        PlayerRB = GetComponent<Rigidbody2D>();
     }
     
     void Update()
@@ -45,31 +45,39 @@ public class PlayerController : MonoBehaviour
 
             if (inputLevel == 0)
             {
-                
+                deactivatedKeys.Add(k, inputLevel);
             }
         }
+
+        this.deactivatedKeys = deactivatedKeys;
         return activatedKeys;
     }
 
     void HandleKeyPress(Dictionary<string, float> activatedKeys)
     {
+        Debug.Log(Input.GetAxisRaw("Sprint"));
+        Vector2 MoveVector = new();
         foreach (KeyValuePair<string, float> item in activatedKeys)
         {
             switch (item.Key)
-            {
+            { 
                 case "Horizontal":
-                    PlayerRB.AddForce(new Vector2(item.Value, 0)*walkSpeed);
+                    MoveVector += new Vector2(item.Value*20*(Input.GetAxisRaw("Sprint") != 0 ? sprintSpeed : walkSpeed), 0);
                     break;
-                // case "Vertical":
-                //     PlayerRB.AddForce(new Vector2(0, item.Value));
-                //     break;
-                case "Jump":
-                    PlayerRB.AddForce(new Vector2(0, item.Value));
+                case "Vertical":
+                    MoveVector += new Vector2(0, item.Value*20*(Input.GetAxisRaw("Sprint") != 0 ? sprintSpeed : walkSpeed));
                     break;
-                case "Sprint":
-                    walkSpeed
+            }
+        }
+
+        foreach (KeyValuePair<string, float> item in deactivatedKeys)
+        {
+            switch (item.Key)
+            {
                 
             }
         }
+        
+        PlayerRB.AddForce(MoveVector);
     }
 }
