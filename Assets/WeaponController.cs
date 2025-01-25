@@ -9,7 +9,8 @@ using Items.Weapons;
 public enum Weapon
 {
     Pistol,
-    Shotgun
+    Shotgun,
+    Minigun
 }
 
 public class WeaponController : MonoBehaviour
