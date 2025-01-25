@@ -10,7 +10,8 @@ public enum Weapon
 {
     Pistol,
     Shotgun,
-    Minigun
+    Minigun,
+    Revolver
 }
 
 public class WeaponController : MonoBehaviour
