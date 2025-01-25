@@ -9,7 +9,7 @@ using Items.Weapons;
 public enum Weapon
 {
     Pistol,
-    Minigun,
+    Minigun
     Shotgun,
     AssaultRifle
 }
