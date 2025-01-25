@@ -1,4 +1,6 @@
-﻿using MEC;
+﻿using System.Collections.Generic;
+using MEC;
+using UnityEditor;
 using UnityEngine;
 
 namespace Items.Weapons
@@ -22,12 +24,16 @@ namespace Items.Weapons
         public override bool isFiring { get; set; } = false;
         public override bool canShoot { get; set; } = true;
 
+        public GameObject prefab;
+        
         public override void Start()
         {
+            bulletPrefab = prefab;
             canShoot = true;
             MagCurrent = MagCapacity;
+
         }
-        
+
         public override void Tick()
         {
             if (isFiring) TryFire();
@@ -36,6 +42,7 @@ namespace Items.Weapons
         public override void FireStart()
         {
             isFiring = true;
+            print("Started Fire");
         }
         
         public override void FireStop()
@@ -45,16 +52,41 @@ namespace Items.Weapons
 
         public override void TryFire()
         {
+            print($"CanShoot: {canShoot}");
             if (canShoot) Fire();
+            print("Attempted Shoot");
         }
 
         public override void Fire()
         {
             canShoot = false;
+            print("did the big shoot");
+            Vector2 rot = new Vector2(transform.rotation.x, transform.rotation.y)*bulletSpeed*100f;
+            SpawnProjectile(rot, Range);
 
-        //SHOOT LOGIC HERE
+            Timing.CallDelayed(2000, () => { canShoot = true; });
+        }
+        
+        public override void SpawnProjectile(Vector2 rot, float range)
+        {
+            GameObject bulletFab = Instantiate(bulletPrefab);
+            bulletFab.SetActive(true);
+            bulletFab.transform.rotation = Quaternion.Euler(rot);
+            List<GameObject> bullets = new List<GameObject>();
+            
+            for (int i = 0; i < bulletFab.transform.childCount; i++)
+            {
+                bullets.Add(bulletFab.transform.GetChild(i).gameObject);
+            }
 
-            Timing.CallDelayed(60000 / fireRate, () => { canShoot = true; });
+            foreach (GameObject i in bullets)
+            {
+                i.AddComponent<Rigidbody2D>();
+                var comp = i.AddComponent<BulletScript>();
+                comp.LifeTime = range;
+                comp.dir = rot;
+            }
+            
         }
     }
 }

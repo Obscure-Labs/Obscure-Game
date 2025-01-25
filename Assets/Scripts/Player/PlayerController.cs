@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,7 +8,8 @@ public class PlayerController : MonoBehaviour
     private List<string> registeredKeyboardInputs = new List<string>()
     {
         "Horizontal",
-        "Vertical"
+        "Vertical",
+        "Fire1"
     };
 
     public Dictionary<string, float> activatedKeys = new Dictionary<string, float>();
@@ -55,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleKeyPress(Dictionary<string, float> activatedKeys)
     {
+        //print(activatedKeys.FirstOrDefault(x => x.Key == "Fire1").Value);
         Vector2 MoveVector = new();
         foreach (KeyValuePair<string, float> item in activatedKeys)
         {
@@ -66,6 +69,9 @@ public class PlayerController : MonoBehaviour
                 case "Vertical":
                     MoveVector += new Vector2(0, item.Value*20*(Input.GetAxisRaw("Sprint") != 0 ? sprintSpeed : walkSpeed));
                     break;
+                case "Fire1":
+                    GetComponentInChildren<WeaponController>().FireWeapon();
+                    break;
             }
         }
 
@@ -73,7 +79,9 @@ public class PlayerController : MonoBehaviour
         {
             switch (item.Key)
             {
-                
+                case "Fire1":
+                    GetComponentInChildren<WeaponController>().StopWeapon();
+                    break;
             }
         }
         

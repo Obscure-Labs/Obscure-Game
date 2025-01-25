@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Items;
 using MEC;
+using UnityEditor;
 using UnityEngine;
 
 namespace Items
@@ -54,9 +55,47 @@ namespace Items
             
         }
 
-        public virtual void SpawnProjectile(Vector2 initialVel, Vector2 constantVel, float range)
+        public virtual void SpawnProjectile(Vector2 rot, float range)
         {
+            GameObject bulletFab = Instantiate(bulletPrefab);
+            bulletFab.transform.rotation = Quaternion.Euler(rot);
+            List<GameObject> bullets = new List<GameObject>();
             
+            for (int i = 0; i < bulletFab.transform.childCount; i++)
+            {
+                bullets.Add(bulletFab.transform.GetChild(i).gameObject);
+            }
+
+            foreach (GameObject i in bullets)
+            {
+                var comp = i.AddComponent<BulletScript>();
+                comp.LifeTime = range;
+                comp.dir = rot;
+            }
+            
+        }
+    }
+
+    public class BulletScript : MonoBehaviour
+    {
+        public float LifeTime;
+        private float timer = 0;
+        public Vector2 dir;
+        public LayerMask mask = 1 << 3;
+        
+        void Update()
+        {
+            print($"Attempting to add force to {gameObject.name}" );
+            GetComponent<Rigidbody2D>().AddForce(dir*20f);
+            Physics.Raycast(gameObject.transform.position,
+                transform.forward + (transform.up * UnityEngine.Random.Range(-0.15f, 0.15f)) +
+                (transform.right * UnityEngine.Random.Range(-0.15f, 0.15f)), out RaycastHit hitInfo, 1, mask);
+            // if (hitInfo.rigidbody == null)
+            // {
+            //     Destroy(transform.parent);
+            // }
+            if(timer > LifeTime*1000) Destroy(transform.parent);
+            timer += Time.deltaTime;
         }
     }
 }
