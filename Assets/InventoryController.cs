@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
-    public static Item[] weapons = new Item[1];
-    public static Item[] OtherStuff = new Item[69];
+    public GunBase[] weapons = new GunBase[1];
+    public Item[] OtherStuff = new Item[69];
     
     
 }

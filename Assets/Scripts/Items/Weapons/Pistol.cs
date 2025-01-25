@@ -28,6 +28,7 @@ namespace Items.Weapons
         //
         public override Transform bulletSpawnpoint { get; set; }
         public override GameObject bulletPrefab { get; set; }
+        public override Weapon Type { get; set; } = Weapon.Pistol;
         public override int MagCurrent { get; set; } = 10;
         public override bool isFiring { get; set; } = false;
         public override bool canShoot { get; set; } = true;

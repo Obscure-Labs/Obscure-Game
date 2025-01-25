@@ -18,6 +18,7 @@ namespace Items
         public abstract float Range { get; set; }
         public abstract Transform bulletSpawnpoint { get; set; }
         public abstract GameObject bulletPrefab { get; set; }
+        public abstract Weapon Type { get; set; }
 
         //CURRENT PARAMETERS
         public abstract int MagCurrent { get; set; }
