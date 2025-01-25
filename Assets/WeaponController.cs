@@ -9,7 +9,10 @@ using Items.Weapons;
 public enum Weapon
 {
     Pistol,
-    Shotgun
+    Minigun,
+    Shotgun,
+    AssaultRifle
+    Revolver
 }
 
 public class WeaponController : MonoBehaviour
@@ -41,7 +44,7 @@ public class WeaponController : MonoBehaviour
     public void SwitchWeapon(Weapon type)
     {
         print(type.ToString());
-        currentWeapon = weaponList.FirstOrDefault(x => x.Name == type.ToString());
+        currentWeapon = weaponList.FirstOrDefault(x => x.Type == type);
         currentWeapon.gameObject.SetActive(true);
         foreach (GunBase i in weaponList)
         {
