@@ -13,6 +13,7 @@ public enum Weapon
     Shotgun,
     AssaultRifle
     Revolver
+    Sniper
 }
 
 public class WeaponController : MonoBehaviour
