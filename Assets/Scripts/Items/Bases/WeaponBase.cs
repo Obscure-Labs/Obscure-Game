@@ -6,24 +6,26 @@ using UnityEngine;
 
 namespace Items
 {
-    public class GunBase : Item
+    public abstract class GunBase : Item
     {
         //STATS
-        public static float Damage { get; set; }
-        public static int MagCapacity { get; set; }
-        public static float ReloadTime { get; set; }
-        public static float fireRate { get; set; }
-        public static float bulletSpeed { get; set; }
-        public static float Range { get; set; }
+        public abstract float Damage { get; set; }
+        public abstract int MagCapacity { get; set; }
+        public abstract float ReloadTime { get; set; }
+        public abstract float fireRate { get; set; }
+        public abstract float bulletSpeed { get; set; }
+        public abstract float Range { get; set; }
+        public abstract Transform bulletSpawnpoint { get; set; }
+        public abstract GameObject bulletPrefab { get; set; }
 
         //CURRENT PARAMETERS
-        public static float MagCurrent { get; set; }
-        public static bool isFiring { get; set; }
-        public static bool canShoot { get; set; } = true;
+        public abstract int MagCurrent { get; set; }
+        public abstract bool isFiring { get; set; }
+        public abstract bool canShoot { get; set; }
 
         public virtual void Start()
         {
-            MagCurrent = MagCapacity;
+            
         }
 
         public virtual void Tick()
@@ -34,26 +36,27 @@ namespace Items
 
         public virtual void FireStart()
         {
-            isFiring = true;
+            
         }
 
         public virtual void FireStop()
         {
-            isFiring = false;
+            
         }
 
         public virtual void TryFire()
         {
-            if (canShoot) Fire();
+            
         }
 
         public virtual void Fire()
         {
-            canShoot = false;
+            
+        }
 
-            //SHOOT LOGIC HERE
-
-            Timing.CallDelayed(60000 / fireRate, () => { canShoot = true; });
+        public virtual void SpawnProjectile(Vector2 initialVel, Vector2 constantVel, float range)
+        {
+            
         }
     }
 }

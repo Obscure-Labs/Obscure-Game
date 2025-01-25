@@ -1,9 +1,11 @@
-﻿namespace Items
+﻿using UnityEngine;
+
+namespace Items
 {
-    public class Item
+    public abstract class Item : MonoBehaviour
     {
-        public static string Name { get; set; }
-        public static int Id { get; set; }
+        public abstract string Name { get; set; }
+        public abstract int Id { get; set; }
 
         public virtual void Use()
         {
