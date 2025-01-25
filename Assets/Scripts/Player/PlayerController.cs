@@ -17,15 +17,19 @@ public class PlayerController : MonoBehaviour
 
     public Dictionary<string, float> activatedKeys = new Dictionary<string, float>();
     public Dictionary<string, float> deactivatedKeys = new Dictionary<string, float>();
+
+    [Header("Sprites")] 
+    public Sprite[] RotationSprites = new Sprite[3];
     [Header("Player Settings")]
     public float walkSpeed = 10;
     public float sprintSpeed = 15;
-
+ 
     [Header("Object Links")] 
     public GameObject WeaponController;
     public Rigidbody2D PlayerRB;
 
     private WeaponController _weaponController;
+    private Vector2 lastMove; 
     void Start()
     {
         _weaponController = WeaponController.GetComponent<WeaponController>();
@@ -34,8 +38,33 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         activatedKeys = CheckKeyPress();
+        RotatePlayer();
     }
 
+    void RotatePlayer()
+    {
+        if (lastMove != null)
+        {
+            if (lastMove.x > 0)
+            {
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = RotationSprites[0];
+            }
+
+            if (lastMove.x < 0)
+            {
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = RotationSprites[1];
+            }
+            if (lastMove.y > 0)
+            {
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = RotationSprites[2];
+            }
+            if (lastMove.y < 0)
+            {
+                transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = RotationSprites[3];
+            }
+        }
+    }
+    
     void FixedUpdate()
     {
         HandleKeyPress(activatedKeys);
@@ -76,9 +105,11 @@ public class PlayerController : MonoBehaviour
             { 
                 case "Horizontal":
                     MoveVector += new Vector2(item.Value*20*(Input.GetAxisRaw("Sprint") != 0 ? sprintSpeed : walkSpeed), 0);
+                    lastMove = new Vector2(item.Value, 0);
                     break;
                 case "Vertical":
                     MoveVector += new Vector2(0, item.Value*20*(Input.GetAxisRaw("Sprint") != 0 ? sprintSpeed : walkSpeed));
+                    lastMove = new Vector2(0, item.Value);
                     break;
                 case "Fire1":
                     GetComponentInChildren<WeaponController>().FireWeapon();
