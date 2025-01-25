@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using DefaultNamespace.Items;
 using MEC;
@@ -7,29 +7,29 @@ using UnityEngine;
 
 namespace Items.Weapons
 {
-    public class Pistol : GunBase
+    public class Revolver : GunBase
     {
         
         
-        public override string Name { get; set; } = "Pistol";
-        public override int Id { get; set; } = 0;
+        public override string Name { get; set; } = "Revolver";
+        public override int Id { get; set; } = 5;
         
         // Measured in Hearts
-        public override int Damage { get; set; } = 35;
-        public override int MagCapacity { get; set; } = 10;
+        public override int Damage { get; set; } = 80;
+        public override int MagCapacity { get; set; } = 6;
         // Measured in Settings
-        public override float ReloadTime { get; set; } = 1.5f;
+        public override float ReloadTime { get; set; } = 3f;
         // Measured in 
-        public override float fireRate { get; set; } = 72f;
+        public override float fireRate { get; set; } = 50f;
         // Measured in Units per second (player walks at 2 units per second and runs at 4)
-        public override float bulletSpeed { get; set; } = 21f;
+        public override float bulletSpeed { get; set; } = 200f;
         // Measured in Seconds
-        public override float Range { get; set; } = 5f;
+        public override float Range { get; set; } = 1.5f;
         //
         public override Transform bulletSpawnpoint { get; set; }
         public override GameObject bulletPrefab { get; set; }
-        public override Weapon Type { get; set; } = Weapon.Pistol;
-        public override int MagCurrent { get; set; } = 10;
+        public override Weapon Type { get; set; } = Weapon.Revolver;
+        public override int MagCurrent { get; set; } = 6;
         public override bool isFiring { get; set; } = false;
         public override bool canShoot { get; set; } = true;
 
@@ -67,6 +67,16 @@ namespace Items.Weapons
 
         public override void Fire()
         {
+            if (MagCurrent > 0)
+            {
+                MagCurrent--;
+            }
+            else
+            {
+                Timing.CallDelayed(ReloadTime, () => { MagCurrent = MagCapacity; });
+
+                return;
+            }
             canShoot = false;
             var v3 = Input.mousePosition;
             v3.z = 10.0f;
@@ -96,7 +106,7 @@ namespace Items.Weapons
                 rb.gravityScale = 0;
                 rb.drag = 0;
                 rb.angularDrag = 0;
-                var comp = i.AddComponent<PistolBulletScript>();
+                var comp = i.AddComponent<RevolverBulletScript>();
                 comp.LifeTime = range;
                 comp.dir = rot;
                 comp.speed = bulletSpeed;
@@ -106,7 +116,7 @@ namespace Items.Weapons
         }
     }
     
-    public class PistolBulletScript : MonoBehaviour
+    public class RevolverBulletScript : MonoBehaviour
     {
         public float LifeTime;
         private float timer = 0;
