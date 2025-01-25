@@ -16,11 +16,11 @@ namespace Items.Weapons
         
         // Measured in Hearts
         public override int Damage { get; set; } = 2;
-        public override int MagCapacity { get; set; } = 100;
+        public override int MagCapacity { get; set; } = 150;
         // Measured in Settings
         public override float ReloadTime { get; set; } = 4f;
         // Measured in 
-        public override float fireRate { get; set; } = 600f;
+        public override float fireRate { get; set; } = 150f;
         // Measured in Units per second (player walks at 2 units per second and runs at 4)
         public override float bulletSpeed { get; set; } = 13f;
         // Measured in Seconds
@@ -29,7 +29,7 @@ namespace Items.Weapons
         public override Transform bulletSpawnpoint { get; set; }
         public override GameObject bulletPrefab { get; set; }
         public override Weapon Type { get; set; } = Weapon.Minigun;
-        public override int MagCurrent { get; set; } = 100;
+        public override int MagCurrent { get; set; } = 150;
         public override bool isFiring { get; set; } = false;
         public override bool canShoot { get; set; } = true;
 
@@ -67,6 +67,21 @@ namespace Items.Weapons
 
         public override void Fire()
         {
+            if (MagCurrent > 0)
+            {
+                MagCurrent--;
+                if (fireRate < 900)
+                {
+                    fireRate += 25f;
+                }
+
+            }
+            else
+            {
+                Timing.CallDelayed(ReloadTime, () => { MagCurrent = MagCapacity; });
+                fireRate = 150f;
+                return;
+            }
             canShoot = false;
             var v3 = Input.mousePosition;
             v3.z = 10.0f;
