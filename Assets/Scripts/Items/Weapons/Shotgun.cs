@@ -12,7 +12,7 @@ namespace Items.Weapons
         public override string Name { get; set; } = "Pistol";
         public override int Id { get; set; } = 0;
 
-        public override float Damage { get; set; } = 15f;
+        public override int Damage { get; set; } = 15;
         public override int MagCapacity { get; set; } = 6;
         public override float ReloadTime { get; set; } = 2.5f;
         public override float fireRate { get; set; } = 272f;
@@ -82,12 +82,34 @@ namespace Items.Weapons
             foreach (GameObject i in bullets)
             {
                 i.AddComponent<Rigidbody2D>();
-                var comp = i.AddComponent<BulletScript>();
+                var comp = i.AddComponent<ShotgunBulletScript>();
                 comp.LifeTime = range;
                 comp.dir = rot += new Vector2(Random.Range(-45, 45), (Random.Range(-45, 45)));
-                comp.GetComponent<Rigidbody2D>().AddForce(comp.dir * bulletSpeed);
             }
 
+        }
+    }
+    
+    public class ShotgunBulletScript : MonoBehaviour
+    {
+        public float LifeTime;
+        private float timer = 0;
+        public Vector2 dir;
+        public LayerMask mask = 1 << 3;
+        
+        void Update()
+        {
+            print($"Attempting to add force to {gameObject.name}" );
+            GetComponent<Rigidbody2D>().AddForce(dir*20f);
+            Physics.Raycast(gameObject.transform.position,
+                transform.forward + (transform.up * UnityEngine.Random.Range(-0.15f, 0.15f)) +
+                (transform.right * UnityEngine.Random.Range(-0.15f, 0.15f)), out RaycastHit hitInfo, 1, mask);
+            // if (hitInfo.rigidbody == null)
+            // {
+            //     Destroy(transform.parent);
+            // }
+            if(timer > LifeTime*1000) Destroy(transform.parent);
+            timer += Time.deltaTime;
         }
     }
 }

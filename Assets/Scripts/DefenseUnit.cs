@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ADU : MonoBehaviour
+public class DefenseUnit : MonoBehaviour
 {
     public float Health;
     // Start is called before the first frame update

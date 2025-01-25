@@ -10,7 +10,7 @@ namespace Items
     public abstract class GunBase : Item
     {
         //STATS
-        public abstract float Damage { get; set; }
+        public abstract int Damage { get; set; }
         public abstract int MagCapacity { get; set; }
         public abstract float ReloadTime { get; set; }
         public abstract float fireRate { get; set; }
@@ -68,7 +68,7 @@ namespace Items
 
             foreach (GameObject i in bullets)
             {
-                var comp = i.AddComponent<BulletScript>();
+                var comp = i.AddComponent<BaseBulletScript>();
                 comp.LifeTime = range;
                 comp.dir = rot;
             }
@@ -76,7 +76,7 @@ namespace Items
         }
     }
 
-    public class BulletScript : MonoBehaviour
+    public class BaseBulletScript : MonoBehaviour
     {
         public float LifeTime;
         private float timer = 0;
