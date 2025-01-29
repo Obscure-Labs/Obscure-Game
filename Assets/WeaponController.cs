@@ -12,7 +12,7 @@ public enum Weapon
     Minigun,
     Shotgun,
     AssaultRifle,
-    Revolver
+    Revolver,
     Sniper
 }
 

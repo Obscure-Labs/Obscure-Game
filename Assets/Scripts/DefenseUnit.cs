@@ -5,15 +5,12 @@ using UnityEngine;
 public class DefenseUnit : MonoBehaviour
 {
     public float Health;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void CheckDead()
     {
-        
+        if (Health < 0)
+        {
+            //Trigger death
+        }
     }
 }
